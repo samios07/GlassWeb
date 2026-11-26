@@ -44,27 +44,20 @@ Existing tools fall short:
 ## System Architecture
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#F5EBE0', 'primaryTextColor': '#2C1A12', 'primaryBorderColor': '#7F5539', 'lineColor': '#B08968', 'edgeLabelBackground': '#F5EBE0'}}}%%
 flowchart TB
-    subgraph CLIENT["1. Chrome Extension — On-Device Privacy Layer"]
-        direction LR
-        A["Active Webpage<br/>Any Live DOM"]:::beige --> B["MV3 Content Script<br/>DOM Pruner · 80-97% Smaller"]:::mocha
-        B --> C["Local PII Shield<br/>Redacts Phone, Email & Cards"]:::espresso
+    subgraph CLIENT["1. Chrome Extension - On-Device Privacy Layer"]
+        A["Active Webpage<br/>Any Live DOM"] --> B["MV3 Content Script<br/>DOM Pruner (80-97% Smaller)"]
+        B --> C["Local PII Shield<br/>Redacts Phone, Email & Cards"]
     end
 
-    subgraph SERVER["2. FastAPI Backend — AI Orchestration & Guardrails"]
-        direction LR
-        D["FastAPI + Pydantic v2<br/>Strict JSON Schema Guard"]:::espresso
-        D --> E["Primary AI<br/>Gemini 3.5 Flash"]:::mocha
-        D -.->|"429 Failover"| F["Backup AI<br/>Groq GPT-OSS-120B"]:::caramel
-        D -.->|"Offline Mode"| G["Local Heuristic<br/>Rule Engine"]:::beige
+    subgraph SERVER["2. FastAPI Backend - AI Orchestration & Guardrails"]
+        D["FastAPI + Pydantic v2<br/>Strict JSON Schema Guard"] --> E["Primary AI<br/>Gemini 3.5 Flash"]
+        D -.->|"429 Failover"| F["Backup AI<br/>Groq GPT-OSS-120B"]
+        D -.->|"Offline Mode"| G["Local Heuristic<br/>Rule Engine"]
     end
 
-    subgraph OUTPUT["3. Visual Truth Layer — User Output"]
-        direction LR
-        H["Chrome Side Panel<br/>Summary, Key Facts & X-Ray Cards"]:::mocha
-        I["Live Webpage Overlay<br/>Click Alert to Scroll & Highlight"]:::espresso
-        H -->|"One-Click Jump"| I
+    subgraph OUTPUT["3. Visual Truth Layer - User Output"]
+        H["Chrome Side Panel<br/>Summary, Key Facts & X-Ray Cards"] -->|"One-Click Jump"| I["Live Webpage Overlay<br/>Scroll & Highlight Clauses"]
     end
 
     C -->|"Sanitised Text Only"| D
@@ -76,6 +69,11 @@ flowchart TB
     classDef mocha fill:#6F4E37,stroke:#E6CCB2,stroke-width:2px,color:#FFF8F0
     classDef caramel fill:#9C6644,stroke:#F5EBE0,stroke-width:2px,color:#FFF8F0
     classDef beige fill:#F5EBE0,stroke:#7F5539,stroke-width:2px,color:#2C1A12
+
+    class C,D,I espresso
+    class B,E,H mocha
+    class F caramel
+    class A,G beige
 
     style CLIENT fill:#EDE0D4,stroke:#7F5539,stroke-width:2px,color:#3E2723
     style SERVER fill:#E6CCB2,stroke:#7F5539,stroke-width:2px,color:#3E2723
