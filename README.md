@@ -45,21 +45,35 @@ Existing tools fall short:
 
 ```mermaid
 flowchart TB
-    A(["1. Open Any Website<br/>Pricing, Insurance, Rentals, or Terms"]) --> B["2. On-Device Privacy Shield<br/>Removes 97% clutter & hides personal data locally"]
-    B --> C["3. AI Analysis Engine<br/>Gemini extracts key facts & spots dark patterns<br/>(Auto-backup if API is busy or offline)"]
-    C --> D["4. Side Panel Summary<br/>True price, deadlines & trap alerts"]
-    C --> E["5. Live Page X-Ray<br/>Highlights hidden clauses right on the page"]
-    D -->|"Click any alert to jump"| E
+    subgraph MAIN["GlassWeb - End-to-End System Architecture"]
+        direction TB
 
-    classDef espresso fill:#3E2723,stroke:#2C1A12,stroke-width:2px,color:#FAF3E0,font-weight:bold
-    classDef mocha fill:#6F4E37,stroke:#3E2723,stroke-width:2px,color:#FFF8F0
-    classDef caramel fill:#9C6644,stroke:#3E2723,stroke-width:2px,color:#FFF8F0
-    classDef beige fill:#F5EBE0,stroke:#5C3A21,stroke-width:2px,color:#2C1A12,font-weight:bold
+        A(["1. User Opens Any Live Webpage<br/>Pricing, Insurance, Rentals, or Terms in Chrome"])
+        B["2. On-Device DOM Pruner and PII Shield<br/>Chrome MV3 (content.js) strips 97% clutter and redacts personal data locally"]
+        C["3. Backend API and Schema Guard<br/>Python FastAPI + Pydantic v2 validates requests and enforces strict JSON output"]
+        D["4. Primary AI Analysis Engine<br/>Google Gemini 3.5 Flash extracts key facts and flags CCPA dark patterns"]
+        E["4b. Automatic Failover Layer<br/>Groq (GPT-OSS-120B) or Local Heuristic Engine ensures zero downtime"]
+        F["5. GlassWeb Side Panel Interface<br/>Chrome Side Panel API (sidepanel.js) displays summary, real costs, and trap alerts"]
+        G(["6. Live Webpage X-Ray Overlay<br/>content.js scrolls to the exact hidden clause and highlights it on screen"])
 
-    class A beige
-    class B mocha
-    class C espresso
-    class D,E caramel
+        A -->|"User clicks Scan and X-Ray Page"| B
+        B -->|"Sends clean, PII-free text to /analyze"| C
+        C -->|"Routes sanitised prompt to Primary AI"| D
+        C -.->|"Triggers automatically if rate-limited or offline"| E
+        D -->|"Returns validated structured JSON"| F
+        E -.->|"Returns backup structured JSON"| F
+        F -->|"User clicks any flagged alert card"| G
+    end
 
-    linkStyle default stroke:#000000,stroke-width:2px
+    style MAIN fill:#F5EBE0,stroke:#5C3A21,stroke-width:2px,color:#2C1A12
+
+    classDef darkBrown fill:#3E2723,stroke:#2C1A12,stroke-width:2px,color:#FFF8F0,font-weight:bold
+    classDef warmBrown fill:#5C3A21,stroke:#3E2723,stroke-width:2px,color:#FFF8F0
+    classDef softBrown fill:#8D6E63,stroke:#5C3A21,stroke-width:2px,color:#FFF8F0
+
+    class A,G darkBrown
+    class B,C,D,F warmBrown
+    class E softBrown
+
+    linkStyle default stroke:#2C1A12,stroke-width:2px
 ```
