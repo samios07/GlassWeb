@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "GlassWeb — AI Browser Co-Pilot",
+  "version": "0.1.0",
+  "description": "Prunes live DOMs, redacts PII locally, extracts key facts, and X-rays dark patterns on any webpage.",
+  "permissions": ["activeTab", "tabs", "sidePanel", "scripting"],
+  "host_permissions": [
+    "<all_urls>",
+    "http://127.0.0.1:8000/*",
+    "http://localhost:8000/*"
+  ],
+  "action": {
+    "default_title": "Open GlassWeb Side Panel"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
