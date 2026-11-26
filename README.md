@@ -78,4 +78,5 @@ flowchart TB
     style CLIENT fill:#EDE0D4,stroke:#7F5539,stroke-width:2px,color:#3E2723
     style SERVER fill:#E6CCB2,stroke:#7F5539,stroke-width:2px,color:#3E2723
     style OUTPUT fill:#EDE0D4,stroke:#7F5539,stroke-width:2px,color:#3E2723
+    linkStyle default stroke:#000000,stroke-width:2px
 ```
