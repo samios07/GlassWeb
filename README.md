@@ -65,14 +65,14 @@ flowchart TB
         F -->|"User clicks any flagged alert card"| G
     end
 
-    style MAIN fill:#F5EBE0,stroke:#8C535D,stroke-width:2px,color:#2C1A12
+    style MAIN fill:#F5EBE0,stroke:#6D3B47,stroke-width:2px,color:#2C1A12
 
     style A fill:#B56576,stroke:#6D3B47,stroke-width:2px,color:#FFFFFF
-    style B fill:#C8828D,stroke:#8C535D,stroke-width:2px,color:#FFFFFF
-    style C fill:#C8828D,stroke:#8C535D,stroke-width:2px,color:#FFFFFF
-    style D fill:#C8828D,stroke:#8C535D,stroke-width:2px,color:#FFFFFF
-    style E fill:#E2B4BC,stroke:#8C535D,stroke-width:2px,color:#2C1A12
-    style F fill:#C8828D,stroke:#8C535D,stroke-width:2px,color:#FFFFFF
+    style B fill:#B56576,stroke:#6D3B47,stroke-width:2px,color:#FFFFFF
+    style C fill:#B56576,stroke:#6D3B47,stroke-width:2px,color:#FFFFFF
+    style D fill:#B56576,stroke:#6D3B47,stroke-width:2px,color:#FFFFFF
+    style E fill:#B56576,stroke:#6D3B47,stroke-width:2px,color:#FFFFFF
+    style F fill:#B56576,stroke:#6D3B47,stroke-width:2px,color:#FFFFFF
     style G fill:#B56576,stroke:#6D3B47,stroke-width:2px,color:#FFFFFF
 
     linkStyle default stroke:#2C1A12,stroke-width:2px
