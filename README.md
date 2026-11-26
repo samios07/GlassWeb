@@ -45,55 +45,21 @@ Existing tools fall short:
 
 ```mermaid
 flowchart TB
-    subgraph L1["LAYER 1: CHROME MANIFEST V3 — ON-DEVICE EXTRACTION & PRIVACY SHIELD"]
-        A(["Active Webpage DOM<br/>Live HTML, Pricing & Fine Print"]) --> B["content.js — DOM Pruner<br/>Strips Scripts, Styles & Ads (80-97% Reduction)"]
-        B --> C{{"On-Device PII Scrubber<br/>Redacts Emails, +91 Phones & Card Patterns"}}
-        SW["background.js<br/>MV3 Service Worker & Tab Router"] -.->|"Controls Lifecycle"| B
-    end
-
-    subgraph L2["LAYER 2: FASTAPI BACKEND — SECURITY & SCHEMA GUARDRAILS"]
-        D["main.py — POST /analyze<br/>CORS + Async Request Handler"] --> E{{"Prompt-Injection Sandbox<br/>Treats DOM Strictly as Untrusted Data"}}
-        E --> F["Pydantic v2 Schema Guard<br/>Enforces PageAnalysis, KeyFacts & Verbatim Snippets"]
-    end
-
-    subgraph L3["LAYER 3: 3-TIER RESILIENT AI INFERENCE ENGINE"]
-        G["Tier 1 Primary<br/>Google Gemini Flash<br/>JSON Mode · Temp 0.2"]
-        H["Tier 2 Auto-Failover<br/>Groq LPU · GPT-OSS-120B<br/>Triggers on HTTP 429 / Timeout"]
-        I["Tier 3 Offline Fallback<br/>Local CCPA Heuristic Engine<br/>Zero-Downtime Resilience"]
-    end
-
-    subgraph L4["LAYER 4: VISUAL TRUTH LAYER & HUMAN-IN-THE-LOOP OUTPUT"]
-        J["sidepanel.js — Side Panel UI<br/>Telemetry, TL;DR, Key Facts & Severity Cards"]
-        K["Live DOM X-Ray Overlay<br/>Exact-Snippet Matching & Red/Amber Badges"]
-        L{{"HITL Safety Gate<br/>Explicit User Approval Before Any Action"}}
-        J -->|"Click Card to Scroll"| K
-        J -.->|"Stage-2 Action Agent"| L
-    end
-
-    C -->|"Sanitised Payload Only (Zero Raw PII)"| D
-    F -->|"Primary Call"| G
-    F -.->|"On Quota / Error"| H
-    F -.->|"Offline / No Key"| I
-    G -->|"Validated JSON"| J
-    H -->|"Validated JSON"| J
-    I -->|"Heuristic JSON"| J
+    A(["1. Open Any Website<br/>Pricing, Insurance, Rentals, or Terms"]) --> B["2. On-Device Privacy Shield<br/>Removes 97% clutter & hides personal data locally"]
+    B --> C["3. AI Analysis Engine<br/>Gemini extracts key facts & spots dark patterns<br/>(Auto-backup if API is busy or offline)"]
+    C --> D["4. Side Panel Summary<br/>True price, deadlines & trap alerts"]
+    C --> E["5. Live Page X-Ray<br/>Highlights hidden clauses right on the page"]
+    D -->|"Click any alert to jump"| E
 
     classDef espresso fill:#3E2723,stroke:#2C1A12,stroke-width:2px,color:#FAF3E0,font-weight:bold
     classDef mocha fill:#6F4E37,stroke:#3E2723,stroke-width:2px,color:#FFF8F0
     classDef caramel fill:#9C6644,stroke:#3E2723,stroke-width:2px,color:#FFF8F0
     classDef beige fill:#F5EBE0,stroke:#5C3A21,stroke-width:2px,color:#2C1A12,font-weight:bold
-    classDef cream fill:#FFF8F0,stroke:#7F5539,stroke-width:2px,color:#2C1A12
 
-    class C,E,F,L espresso
-    class B,D,G,J mocha
-    class H,K caramel
-    class A,I beige
-    class SW cream
-
-    style L1 fill:#F3E7DB,stroke:#5C3A21,stroke-width:2px,color:#2C1A12
-    style L2 fill:#E8D5C4,stroke:#5C3A21,stroke-width:2px,color:#2C1A12
-    style L3 fill:#F3E7DB,stroke:#5C3A21,stroke-width:2px,color:#2C1A12
-    style L4 fill:#E8D5C4,stroke:#5C3A21,stroke-width:2px,color:#2C1A12
+    class A beige
+    class B mocha
+    class C espresso
+    class D,E caramel
 
     linkStyle default stroke:#000000,stroke-width:2px
 ```
