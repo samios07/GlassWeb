@@ -45,38 +45,55 @@ Existing tools fall short:
 
 ```mermaid
 flowchart TB
-    subgraph CLIENT["1. Chrome Extension - On-Device Privacy Layer"]
-        A["Active Webpage<br/>Any Live DOM"] --> B["MV3 Content Script<br/>DOM Pruner (80-97% Smaller)"]
-        B --> C["Local PII Shield<br/>Redacts Phone, Email & Cards"]
+    subgraph L1["LAYER 1: CHROME MANIFEST V3 — ON-DEVICE EXTRACTION & PRIVACY SHIELD"]
+        A(["Active Webpage DOM<br/>Live HTML, Pricing & Fine Print"]) --> B["content.js — DOM Pruner<br/>Strips Scripts, Styles & Ads (80-97% Reduction)"]
+        B --> C{{"On-Device PII Scrubber<br/>Redacts Emails, +91 Phones & Card Patterns"}}
+        SW["background.js<br/>MV3 Service Worker & Tab Router"] -.->|"Controls Lifecycle"| B
     end
 
-    subgraph SERVER["2. FastAPI Backend - AI Orchestration & Guardrails"]
-        D["FastAPI + Pydantic v2<br/>Strict JSON Schema Guard"] --> E["Primary AI<br/>Gemini 3.5 Flash"]
-        D -.->|"429 Failover"| F["Backup AI<br/>Groq GPT-OSS-120B"]
-        D -.->|"Offline Mode"| G["Local Heuristic<br/>Rule Engine"]
+    subgraph L2["LAYER 2: FASTAPI BACKEND — SECURITY & SCHEMA GUARDRAILS"]
+        D["main.py — POST /analyze<br/>CORS + Async Request Handler"] --> E{{"Prompt-Injection Sandbox<br/>Treats DOM Strictly as Untrusted Data"}}
+        E --> F["Pydantic v2 Schema Guard<br/>Enforces PageAnalysis, KeyFacts & Verbatim Snippets"]
     end
 
-    subgraph OUTPUT["3. Visual Truth Layer - User Output"]
-        H["Chrome Side Panel<br/>Summary, Key Facts & X-Ray Cards"] -->|"One-Click Jump"| I["Live Webpage Overlay<br/>Scroll & Highlight Clauses"]
+    subgraph L3["LAYER 3: 3-TIER RESILIENT AI INFERENCE ENGINE"]
+        G["Tier 1 Primary<br/>Google Gemini Flash<br/>JSON Mode · Temp 0.2"]
+        H["Tier 2 Auto-Failover<br/>Groq LPU · GPT-OSS-120B<br/>Triggers on HTTP 429 / Timeout"]
+        I["Tier 3 Offline Fallback<br/>Local CCPA Heuristic Engine<br/>Zero-Downtime Resilience"]
     end
 
-    C -->|"Sanitised Text Only"| D
-    E --> H
-    F --> H
-    G --> H
+    subgraph L4["LAYER 4: VISUAL TRUTH LAYER & HUMAN-IN-THE-LOOP OUTPUT"]
+        J["sidepanel.js — Side Panel UI<br/>Telemetry, TL;DR, Key Facts & Severity Cards"]
+        K["Live DOM X-Ray Overlay<br/>Exact-Snippet Matching & Red/Amber Badges"]
+        L{{"HITL Safety Gate<br/>Explicit User Approval Before Any Action"}}
+        J -->|"Click Card to Scroll"| K
+        J -.->|"Stage-2 Action Agent"| L
+    end
 
-    classDef espresso fill:#3E2723,stroke:#D7B899,stroke-width:2px,color:#FAF3E0,font-weight:bold
-    classDef mocha fill:#6F4E37,stroke:#E6CCB2,stroke-width:2px,color:#FFF8F0
-    classDef caramel fill:#9C6644,stroke:#F5EBE0,stroke-width:2px,color:#FFF8F0
-    classDef beige fill:#F5EBE0,stroke:#7F5539,stroke-width:2px,color:#2C1A12
+    C -->|"Sanitised Payload Only (Zero Raw PII)"| D
+    F -->|"Primary Call"| G
+    F -.->|"On Quota / Error"| H
+    F -.->|"Offline / No Key"| I
+    G -->|"Validated JSON"| J
+    H -->|"Validated JSON"| J
+    I -->|"Heuristic JSON"| J
 
-    class C,D,I espresso
-    class B,E,H mocha
-    class F caramel
-    class A,G beige
+    classDef espresso fill:#3E2723,stroke:#2C1A12,stroke-width:2px,color:#FAF3E0,font-weight:bold
+    classDef mocha fill:#6F4E37,stroke:#3E2723,stroke-width:2px,color:#FFF8F0
+    classDef caramel fill:#9C6644,stroke:#3E2723,stroke-width:2px,color:#FFF8F0
+    classDef beige fill:#F5EBE0,stroke:#5C3A21,stroke-width:2px,color:#2C1A12,font-weight:bold
+    classDef cream fill:#FFF8F0,stroke:#7F5539,stroke-width:2px,color:#2C1A12
 
-    style CLIENT fill:#EDE0D4,stroke:#7F5539,stroke-width:2px,color:#3E2723
-    style SERVER fill:#E6CCB2,stroke:#7F5539,stroke-width:2px,color:#3E2723
-    style OUTPUT fill:#EDE0D4,stroke:#7F5539,stroke-width:2px,color:#3E2723
+    class C,E,F,L espresso
+    class B,D,G,J mocha
+    class H,K caramel
+    class A,I beige
+    class SW cream
+
+    style L1 fill:#F3E7DB,stroke:#5C3A21,stroke-width:2px,color:#2C1A12
+    style L2 fill:#E8D5C4,stroke:#5C3A21,stroke-width:2px,color:#2C1A12
+    style L3 fill:#F3E7DB,stroke:#5C3A21,stroke-width:2px,color:#2C1A12
+    style L4 fill:#E8D5C4,stroke:#5C3A21,stroke-width:2px,color:#2C1A12
+
     linkStyle default stroke:#000000,stroke-width:2px
 ```
